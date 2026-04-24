@@ -31,17 +31,77 @@
       align-items: center;
     }
 
+    #setup {
+      width: 100%;
+      max-width: 480px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+
+    #setup h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; }
+    #setup p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+
+    .setup-steps {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 20px;
+      font-size: 0.8rem;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    .setup-steps b { color: var(--text); }
+    .setup-steps a { color: var(--accent); text-decoration: none; }
+
+    #pat-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 0.875rem;
+      padding: 10px 12px;
+      outline: none;
+      margin-bottom: 10px;
+      font-family: monospace;
+    }
+
+    #pat-input:focus { border-color: var(--accent); }
+    #pat-input::placeholder { color: var(--muted); }
+
+    .setup-error { font-size: 0.8rem; color: var(--low); margin-bottom: 10px; min-height: 18px; }
+
+    #app { width: 100%; display: flex; flex-direction: column; align-items: center; }
+
     header {
       width: 100%;
       max-width: 640px;
       padding: 24px 20px 0;
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
+      align-items: center;
     }
 
     header h1 { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; }
-    header span { font-size: 0.8rem; color: var(--muted); }
+
+    .header-right { display: flex; align-items: center; gap: 10px; }
+
+    .sync-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--muted);
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+    .sync-dot.syncing { background: var(--mid); animation: pulse 1s infinite; }
+    .sync-dot.synced  { background: var(--high); }
+    .sync-dot.error   { background: var(--low); }
+
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+    header span.date { font-size: 0.8rem; color: var(--muted); }
 
     nav {
       width: 100%;
@@ -64,38 +124,16 @@
       transition: background 0.15s, color 0.15s;
     }
 
-    nav button.active {
-      background: var(--surface);
-      color: var(--text);
-    }
+    nav button.active { background: var(--surface); color: var(--text); }
 
-    main {
-      width: 100%;
-      max-width: 640px;
-      padding: 20px;
-      flex: 1;
-    }
+    main { width: 100%; max-width: 640px; padding: 20px; flex: 1; }
 
     .tab { display: none; }
     .tab.active { display: block; }
 
-    .time-badge {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    .time-badge .hour {
-      font-size: 3rem;
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      line-height: 1;
-    }
-
-    .time-badge .label {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-top: 4px;
-    }
+    .time-badge { text-align: center; margin-bottom: 24px; }
+    .time-badge .hour { font-size: 3rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+    .time-badge .label { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
 
     .energy-grid {
       display: grid;
@@ -117,7 +155,6 @@
     }
 
     .energy-btn:hover { transform: scale(1.06); }
-    .energy-btn.selected { border-color: var(--accent); background: var(--accent-dim); }
 
     .energy-btn[data-v="1"], .energy-btn[data-v="2"], .energy-btn[data-v="3"] { color: var(--low); }
     .energy-btn[data-v="4"], .energy-btn[data-v="5"], .energy-btn[data-v="6"] { color: var(--mid); }
@@ -185,151 +222,226 @@
       margin-bottom: 14px;
     }
 
-    .chart-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .chart-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .chart-label {
-      width: 44px;
-      font-size: 0.75rem;
-      color: var(--muted);
-      text-align: right;
-      flex-shrink: 0;
-    }
-
-    .chart-bar-wrap {
-      flex: 1;
-      height: 22px;
-      background: var(--surface);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .chart-bar {
-      height: 100%;
-      border-radius: 4px;
-      transition: width 0.4s ease;
-    }
-
-    .chart-value {
-      width: 28px;
-      font-size: 0.75rem;
-      color: var(--muted);
-      flex-shrink: 0;
-    }
-
+    .chart-wrap { display: flex; flex-direction: column; gap: 6px; }
+    .chart-row { display: flex; align-items: center; gap: 8px; }
+    .chart-label { width: 44px; font-size: 0.75rem; color: var(--muted); text-align: right; flex-shrink: 0; }
+    .chart-bar-wrap { flex: 1; height: 22px; background: var(--surface); border-radius: 4px; overflow: hidden; }
+    .chart-bar { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+    .chart-value { width: 28px; font-size: 0.75rem; color: var(--muted); flex-shrink: 0; }
     .peak-badge {
-      font-size: 0.7rem;
-      padding: 2px 6px;
-      border-radius: 20px;
-      background: #0d2e18;
-      color: var(--high);
-      font-weight: 600;
-      flex-shrink: 0;
+      font-size: 0.7rem; padding: 2px 6px; border-radius: 20px;
+      background: #0d2e18; color: var(--high); font-weight: 600; flex-shrink: 0;
     }
 
-    .insights {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
+    .insights { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+    .insight-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
+    .insight-card .card-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+    .insight-card .card-value { font-size: 1.3rem; font-weight: 700; }
+    .insight-card .card-sub { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
 
-    .insight-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px;
-    }
+    .empty { text-align: center; color: var(--muted); font-size: 0.875rem; padding: 40px 0; }
 
-    .insight-card .card-label {
-      font-size: 0.72rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 6px;
-    }
-
-    .insight-card .card-value {
-      font-size: 1.3rem;
-      font-weight: 700;
-    }
-
-    .insight-card .card-sub {
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .empty {
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.875rem;
-      padding: 40px 0;
-    }
+    .btn { padding: 10px 16px; border: none; border-radius: var(--radius); background: var(--accent); color: #fff; font-size: 0.875rem; font-weight: 600; cursor: pointer; }
+    .btn:hover { background: var(--accent-dim); }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Energy Tracker</h1>
-    <span id="date-display"></span>
-  </header>
 
-  <nav>
-    <button class="active" onclick="switchTab('log')">Log</button>
-    <button onclick="switchTab('today')">Today</button>
-    <button onclick="switchTab('patterns')">Patterns</button>
-  </nav>
+  <div id="setup">
+    <h2>Connect GitHub Sync</h2>
+    <p>Your logs will be saved to your GitHub repo so they stay in sync across all devices.</p>
+    <div class="setup-steps">
+      <b>Create a Personal Access Token:</b><br>
+      1. Go to <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">GitHub → Settings → Fine-grained tokens → Generate new</a><br>
+      2. Token name: <b>Energy Tracker</b><br>
+      3. Repository access: <b>Only selected → Learn_Claude</b><br>
+      4. Permissions → Contents: <b>Read and Write</b><br>
+      5. Click <b>Generate token</b> and paste it below
+    </div>
+    <input id="pat-input" type="password" placeholder="github_pat_… or ghp_…" autocomplete="off" />
+    <div class="setup-error" id="setup-error"></div>
+    <button class="btn" style="width:100%" onclick="connectGitHub()">Connect &amp; Sync</button>
+  </div>
 
-  <main>
-    <section class="tab active" id="tab-log">
-      <div class="time-badge">
-        <div class="hour" id="current-hour-display"></div>
-        <div class="label">Current hour — tap your energy level</div>
+  <div id="app" hidden>
+    <header>
+      <h1>Energy Tracker</h1>
+      <div class="header-right">
+        <div class="sync-dot" id="sync-dot" title="Sync status"></div>
+        <span class="date" id="date-display"></span>
       </div>
-
-      <div class="energy-grid" id="energy-grid"></div>
-
-      <textarea id="note-input" placeholder="Optional note (what you're doing, how you feel…)"></textarea>
-
-      <button class="log-btn" id="log-btn" onclick="logEntry()">Log Energy</button>
-      <div class="toast" id="toast"></div>
-    </section>
-
-    <section class="tab" id="tab-today">
-      <p class="section-title">Today's energy</p>
-      <div class="chart-wrap" id="today-chart"></div>
-    </section>
-
-    <section class="tab" id="tab-patterns">
-      <div class="insights" id="insights"></div>
-      <p class="section-title">Average energy by hour</p>
-      <div class="chart-wrap" id="patterns-chart"></div>
-    </section>
-  </main>
+    </header>
+    <nav>
+      <button class="active" onclick="switchTab('log')">Log</button>
+      <button onclick="switchTab('today')">Today</button>
+      <button onclick="switchTab('patterns')">Patterns</button>
+    </nav>
+    <main>
+      <section class="tab active" id="tab-log">
+        <div class="time-badge">
+          <div class="hour" id="current-hour-display"></div>
+          <div class="label">Current hour — tap your energy level</div>
+        </div>
+        <div class="energy-grid" id="energy-grid"></div>
+        <textarea id="note-input" placeholder="Optional note (what you're doing, how you feel…)"></textarea>
+        <button class="log-btn" id="log-btn" onclick="logEntry()">Log Energy</button>
+        <div class="toast" id="toast"></div>
+      </section>
+      <section class="tab" id="tab-today">
+        <p class="section-title">Today's energy</p>
+        <div class="chart-wrap" id="today-chart"></div>
+      </section>
+      <section class="tab" id="tab-patterns">
+        <div class="insights" id="insights"></div>
+        <p class="section-title">Average energy by hour</p>
+        <div class="chart-wrap" id="patterns-chart"></div>
+      </section>
+    </main>
+  </div>
 
   <script>
-    const STORAGE_KEY = 'energy_logs_v1';
+    const GH_OWNER  = 'hardik-learn';
+    const GH_REPO   = 'Learn_Claude';
+    const GH_BRANCH = 'gh-pages';
+    const GH_FILE   = 'data.json';
+    const PAT_KEY   = 'gh_pat_energy';
 
-    function getLogs() {
-      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
-      catch { return []; }
+    let token = null;
+    let fileSha = null;
+    let logs = [];
+    let selectedEnergy = null;
+
+    function b64encode(str) { return btoa(unescape(encodeURIComponent(str))); }
+    function b64decode(str) { return decodeURIComponent(escape(atob(str.replace(/\s/g, '')))); }
+
+    function ghHeaders() {
+      return {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+        'X-GitHub-Api-Version': '2022-11-28'
+      };
     }
 
-    function saveLogs(logs) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+    async function ghLoad() {
+      setSyncState('syncing');
+      const res = await fetch(
+        `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}?ref=${GH_BRANCH}`,
+        { headers: ghHeaders() }
+      );
+      if (res.status === 404) { fileSha = null; logs = []; setSyncState('synced'); return; }
+      if (!res.ok) throw new Error(`Load failed: ${res.status}`);
+      const data = await res.json();
+      fileSha = data.sha;
+      logs = JSON.parse(b64decode(data.content));
+      setSyncState('synced');
     }
 
-    function currentHour() {
-      return new Date().getHours();
+    async function ghSave() {
+      setSyncState('syncing');
+      const body = {
+        message: 'Update energy logs',
+        content: b64encode(JSON.stringify(logs)),
+        branch: GH_BRANCH,
+      };
+      if (fileSha) body.sha = fileSha;
+
+      const res = await fetch(
+        `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`,
+        { method: 'PUT', headers: ghHeaders(), body: JSON.stringify(body) }
+      );
+
+      if (res.status === 409) {
+        await ghLoad();
+        return ghSave();
+      }
+      if (!res.ok) throw new Error(`Save failed: ${res.status}`);
+      const result = await res.json();
+      fileSha = result.content?.sha;
+      setSyncState('synced');
+    }
+
+    async function connectGitHub() {
+      const input = document.getElementById('pat-input').value.trim();
+      const errEl = document.getElementById('setup-error');
+      errEl.textContent = '';
+      if (!input) { errEl.textContent = 'Please paste your token.'; return; }
+      token = input;
+      try {
+        await ghLoad();
+        localStorage.setItem(PAT_KEY, token);
+        document.getElementById('setup').hidden = true;
+        document.getElementById('app').hidden = false;
+        initApp();
+      } catch (e) {
+        token = null;
+        errEl.textContent = 'Could not connect. Check the token has Contents read/write access to this repo.';
+      }
+    }
+
+    function setSyncState(state) {
+      const dot = document.getElementById('sync-dot');
+      if (!dot) return;
+      dot.className = 'sync-dot ' + state;
+      dot.title = state === 'syncing' ? 'Syncing…' : state === 'synced' ? 'Synced' : 'Sync error';
+    }
+
+    function initApp() {
+      buildEnergyGrid();
+      updateClock();
+      setInterval(updateClock, 30000);
+    }
+
+    function buildEnergyGrid() {
+      const grid = document.getElementById('energy-grid');
+      grid.innerHTML = '';
+      for (let i = 1; i <= 10; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'energy-btn';
+        btn.dataset.v = i;
+        btn.textContent = i;
+        btn.onclick = () => selectEnergy(i);
+        grid.appendChild(btn);
+      }
+    }
+
+    function selectEnergy(v) {
+      selectedEnergy = v;
+      document.querySelectorAll('.energy-btn').forEach(b => {
+        b.classList.toggle('selected', Number(b.dataset.v) === v);
+      });
+    }
+
+    async function logEntry() {
+      if (!selectedEnergy) return;
+      const note = document.getElementById('note-input').value.trim();
+      const now = new Date();
+      const h = now.getHours();
+      const day = todayKey();
+
+      const idx = logs.findIndex(l => l.day === day && l.hour === h);
+      const entry = { day, hour: h, energy: selectedEnergy, note, ts: now.toISOString() };
+      if (idx >= 0) logs[idx] = entry; else logs.push(entry);
+
+      selectedEnergy = null;
+      document.querySelectorAll('.energy-btn').forEach(b => b.classList.remove('selected'));
+      document.getElementById('note-input').value = '';
+      showToast('Saving…');
+
+      try {
+        await ghSave();
+        showToast('Logged & synced!');
+      } catch (e) {
+        setSyncState('error');
+        showToast('Saved locally — sync failed');
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.opacity = '1';
+      setTimeout(() => { t.style.opacity = '0'; }, 2500);
     }
 
     function todayKey() {
@@ -351,76 +463,39 @@
       return 'var(--high)';
     }
 
-    function buildEnergyGrid() {
-      const grid = document.getElementById('energy-grid');
-      grid.innerHTML = '';
-      for (let i = 1; i <= 10; i++) {
-        const btn = document.createElement('button');
-        btn.className = 'energy-btn';
-        btn.dataset.v = i;
-        btn.textContent = i;
-        btn.onclick = () => selectEnergy(i);
-        grid.appendChild(btn);
-      }
-    }
-
-    let selectedEnergy = null;
-
-    function selectEnergy(v) {
-      selectedEnergy = v;
-      document.querySelectorAll('.energy-btn').forEach(b => {
-        b.classList.toggle('selected', Number(b.dataset.v) === v);
-      });
-    }
-
-    function logEntry() {
-      if (!selectedEnergy) return;
-      const note = document.getElementById('note-input').value.trim();
-      const logs = getLogs();
+    function updateClock() {
       const now = new Date();
-      const h = currentHour();
-
-      const idx = logs.findIndex(l => l.day === todayKey() && l.hour === h);
-      const entry = { day: todayKey(), hour: h, energy: selectedEnergy, note, ts: now.toISOString() };
-      if (idx >= 0) logs[idx] = entry;
-      else logs.push(entry);
-
-      saveLogs(logs);
-
-      selectedEnergy = null;
-      document.querySelectorAll('.energy-btn').forEach(b => b.classList.remove('selected'));
-      document.getElementById('note-input').value = '';
-      showToast('Logged!');
+      const el = document.getElementById('current-hour-display');
+      if (el) el.textContent = formatHour(now.getHours());
+      const de = document.getElementById('date-display');
+      if (de) de.textContent = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
     }
 
-    function showToast(msg) {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.style.opacity = '1';
-      setTimeout(() => { t.style.opacity = '0'; }, 2000);
+    function switchTab(name) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      const idx = ['log', 'today', 'patterns'].indexOf(name);
+      document.querySelectorAll('nav button')[idx].classList.add('active');
+      if (name === 'today') renderToday();
+      if (name === 'patterns') renderPatterns();
     }
 
     function renderToday() {
-      const logs = getLogs();
       const today = todayKey();
       const todayLogs = {};
       logs.filter(l => l.day === today).forEach(l => { todayLogs[l.hour] = l; });
-
       const wrap = document.getElementById('today-chart');
-
       if (Object.keys(todayLogs).length === 0) {
-        wrap.innerHTML = '<p class="empty">No entries yet today. Start logging your energy levels!</p>';
+        wrap.innerHTML = '<p class="empty">No entries yet today.</p>';
         return;
       }
-
       wrap.innerHTML = '';
       for (let h = 6; h <= 23; h++) {
         const entry = todayLogs[h];
+        const pct = entry ? (entry.energy / 10 * 100) : 0;
         const row = document.createElement('div');
         row.className = 'chart-row';
-
-        const pct = entry ? (entry.energy / 10 * 100) : 0;
-
         row.innerHTML = `
           <span class="chart-label">${formatHour(h)}</span>
           <div class="chart-bar-wrap">
@@ -434,34 +509,24 @@
     }
 
     function renderPatterns() {
-      const logs = getLogs();
-
       if (logs.length === 0) {
         document.getElementById('insights').innerHTML = '';
         document.getElementById('patterns-chart').innerHTML =
           '<p class="empty">Log a few days of energy levels to see your patterns.</p>';
         return;
       }
-
       const byHour = {};
       for (let h = 0; h < 24; h++) byHour[h] = { sum: 0, count: 0 };
-      logs.forEach(l => {
-        byHour[l.hour].sum += l.energy;
-        byHour[l.hour].count++;
-      });
-
+      logs.forEach(l => { byHour[l.hour].sum += l.energy; byHour[l.hour].count++; });
       const avgs = Object.entries(byHour)
         .filter(([, v]) => v.count > 0)
         .map(([h, v]) => ({ hour: Number(h), avg: v.sum / v.count }));
-
       avgs.sort((a, b) => b.avg - a.avg);
-      const topPeaks = avgs.slice(0, 3);
       const topPeak = avgs[0];
+      const topPeaks = avgs.slice(0, 3);
       const bottomVal = [...avgs].sort((a, b) => a.avg - b.avg)[0];
-
       const totalDays = new Set(logs.map(l => l.day)).size;
       const overallAvg = logs.reduce((s, l) => s + l.energy, 0) / logs.length;
-
       document.getElementById('insights').innerHTML = `
         <div class="insight-card">
           <div class="card-label">Peak hour</div>
@@ -484,20 +549,15 @@
           <div class="card-sub">days of data</div>
         </div>
       `;
-
       const maxAvg = Math.max(...avgs.map(a => a.avg), 1);
       const peakHours = new Set(topPeaks.map(p => p.hour));
-
       const wrap = document.getElementById('patterns-chart');
       wrap.innerHTML = '';
-
       for (let h = 6; h <= 23; h++) {
         const entry = byHour[h];
         if (entry.count === 0) continue;
         const avg = entry.sum / entry.count;
         const pct = avg / maxAvg * 100;
-        const isPeak = peakHours.has(h);
-
         const row = document.createElement('div');
         row.className = 'chart-row';
         row.innerHTML = `
@@ -506,34 +566,29 @@
             <div class="chart-bar" style="width:${pct}%;background:${energyColor(avg)}"></div>
           </div>
           <span class="chart-value">${avg.toFixed(1)}</span>
-          ${isPeak ? '<span class="peak-badge">peak</span>' : ''}
+          ${peakHours.has(h) ? '<span class="peak-badge">peak</span>' : ''}
         `;
         wrap.appendChild(row);
       }
     }
 
-    function switchTab(name) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-      document.getElementById('tab-' + name).classList.add('active');
-      const idx = ['log', 'today', 'patterns'].indexOf(name);
-      document.querySelectorAll('nav button')[idx].classList.add('active');
-
-      if (name === 'today') renderToday();
-      if (name === 'patterns') renderPatterns();
-    }
-
-    function updateClock() {
-      const now = new Date();
-      const h = now.getHours();
-      document.getElementById('current-hour-display').textContent = `${formatHour(h)}`;
-      document.getElementById('date-display').textContent =
-        now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-    }
-
-    buildEnergyGrid();
-    updateClock();
-    setInterval(updateClock, 30000);
+    (async () => {
+      const saved = localStorage.getItem(PAT_KEY);
+      if (saved) {
+        token = saved;
+        try {
+          await ghLoad();
+          document.getElementById('setup').hidden = true;
+          document.getElementById('app').hidden = false;
+          initApp();
+        } catch (e) {
+          localStorage.removeItem(PAT_KEY);
+          document.getElementById('setup').hidden = false;
+        }
+      } else {
+        document.getElementById('setup').hidden = false;
+      }
+    })();
   </script>
 </body>
 </html>
