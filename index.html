@@ -79,7 +79,6 @@
     .tab { display: none; }
     .tab.active { display: block; }
 
-    /* ── LOG TAB ── */
     .time-badge {
       text-align: center;
       margin-bottom: 24px;
@@ -177,7 +176,6 @@
       transition: opacity 0.4s;
     }
 
-    /* ── TODAY / PATTERNS SHARED ── */
     .section-title {
       font-size: 0.75rem;
       font-weight: 600;
@@ -238,7 +236,6 @@
       flex-shrink: 0;
     }
 
-    /* ── PATTERNS TAB ── */
     .insights {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -293,7 +290,6 @@
   </nav>
 
   <main>
-    <!-- LOG TAB -->
     <section class="tab active" id="tab-log">
       <div class="time-badge">
         <div class="hour" id="current-hour-display"></div>
@@ -308,13 +304,11 @@
       <div class="toast" id="toast"></div>
     </section>
 
-    <!-- TODAY TAB -->
     <section class="tab" id="tab-today">
       <p class="section-title">Today's energy</p>
       <div class="chart-wrap" id="today-chart"></div>
     </section>
 
-    <!-- PATTERNS TAB -->
     <section class="tab" id="tab-patterns">
       <div class="insights" id="insights"></div>
       <p class="section-title">Average energy by hour</p>
@@ -357,7 +351,6 @@
       return 'var(--high)';
     }
 
-    // ── INIT ENERGY GRID ──
     function buildEnergyGrid() {
       const grid = document.getElementById('energy-grid');
       grid.innerHTML = '';
@@ -380,7 +373,6 @@
       });
     }
 
-    // ── LOG ENTRY ──
     function logEntry() {
       if (!selectedEnergy) return;
       const note = document.getElementById('note-input').value.trim();
@@ -388,7 +380,6 @@
       const now = new Date();
       const h = currentHour();
 
-      // Replace existing entry for same day+hour
       const idx = logs.findIndex(l => l.day === todayKey() && l.hour === h);
       const entry = { day: todayKey(), hour: h, energy: selectedEnergy, note, ts: now.toISOString() };
       if (idx >= 0) logs[idx] = entry;
@@ -396,7 +387,6 @@
 
       saveLogs(logs);
 
-      // Reset UI
       selectedEnergy = null;
       document.querySelectorAll('.energy-btn').forEach(b => b.classList.remove('selected'));
       document.getElementById('note-input').value = '';
@@ -410,7 +400,6 @@
       setTimeout(() => { t.style.opacity = '0'; }, 2000);
     }
 
-    // ── TODAY CHART ──
     function renderToday() {
       const logs = getLogs();
       const today = todayKey();
@@ -430,8 +419,7 @@
         const row = document.createElement('div');
         row.className = 'chart-row';
 
-        const maxVal = 10;
-        const pct = entry ? (entry.energy / maxVal * 100) : 0;
+        const pct = entry ? (entry.energy / 10 * 100) : 0;
 
         row.innerHTML = `
           <span class="chart-label">${formatHour(h)}</span>
@@ -445,7 +433,6 @@
       }
     }
 
-    // ── PATTERNS CHART ──
     function renderPatterns() {
       const logs = getLogs();
 
@@ -456,7 +443,6 @@
         return;
       }
 
-      // Aggregate by hour
       const byHour = {};
       for (let h = 0; h < 24; h++) byHour[h] = { sum: 0, count: 0 };
       logs.forEach(l => {
@@ -473,7 +459,6 @@
       const topPeak = avgs[0];
       const bottomVal = [...avgs].sort((a, b) => a.avg - b.avg)[0];
 
-      // Insights
       const totalDays = new Set(logs.map(l => l.day)).size;
       const overallAvg = logs.reduce((s, l) => s + l.energy, 0) / logs.length;
 
@@ -500,7 +485,6 @@
         </div>
       `;
 
-      // Chart
       const maxAvg = Math.max(...avgs.map(a => a.avg), 1);
       const peakHours = new Set(topPeaks.map(p => p.hour));
 
@@ -528,7 +512,6 @@
       }
     }
 
-    // ── TAB SWITCHING ──
     function switchTab(name) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
@@ -540,17 +523,14 @@
       if (name === 'patterns') renderPatterns();
     }
 
-    // ── CLOCK ──
     function updateClock() {
       const now = new Date();
       const h = now.getHours();
-      const m = String(now.getMinutes()).padStart(2, '0');
       document.getElementById('current-hour-display').textContent = `${formatHour(h)}`;
       document.getElementById('date-display').textContent =
         now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
     }
 
-    // ── BOOT ──
     buildEnergyGrid();
     updateClock();
     setInterval(updateClock, 30000);
